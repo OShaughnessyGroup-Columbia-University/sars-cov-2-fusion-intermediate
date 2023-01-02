@@ -1,0 +1,20 @@
+#include "martini_v2.2.itp"
+#include "martini_v2.0_solvents.itp"
+#include "martini_v2.0_ions.itp"
+#include "martini_v2.0_lipids_all_201506.itp"
+#include "Protein_A.itp"
+#include "Protein_D.itp"
+
+[ system ]
+; name
+MARTINI SYSTEM
+
+[ molecules ]
+; name  number
+DPPC          3042
+Protein_A        3
+Protein_D        3
+DPPC          3024
+W           203768
+NA+           3074
+CL-           3038

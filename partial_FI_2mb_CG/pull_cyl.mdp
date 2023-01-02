@@ -1,0 +1,72 @@
+integrator               = md
+tinit                    = 0.0
+dt                       = 0.020
+nsteps                   = 15000000
+
+nstxout                  = 0
+nstvout                  = 0
+nstfout                  = 0
+nstlog                   = 100000
+nstenergy                = 100
+nstxout-compressed       = 500;50000
+compressed-x-precision   = 100
+
+cutoff-scheme            = Verlet
+nstlist                  = 20
+
+ns_type                  = grid
+pbc                      = xyz
+verlet-buffer-tolerance  = 0.005
+
+epsilon_r                = 15
+coulombtype              = reaction-field
+rcoulomb                 = 1.1
+vdw_type                 = cutoff
+vdw-modifier             = Potential-shift-verlet
+rvdw                     = 1.1
+
+tcoupl                   = v-rescale
+tc-grps                  = system
+tau_t                    = 1.0
+ref_t                    = 310.15
+
+; Pressure coupling:
+Pcoupl                   = berendsen;Parrinello-rahman
+Pcoupltype               = surface-tension;semiisotropic
+tau_p                    = 1.0;12.0
+compressibility          = 5e-6 5e-6;3e-4 3e-4
+ref_p                    = 1.5  1.0
+
+; GENERATE VELOCITIES FOR STARTUP RUN:
+gen_vel                  = no
+gen_temp                 = 310.15
+refcoord_scaling         = all
+
+; Pull code
+pull                    = yes
+pull-ncoords            = 2         ; three reaction coordinate
+pull-ngroups            = 4         ; six groups defining one reaction coordinate
+pull-group1-name        = top_mem;fp_nhelix2
+pull-group2-name        = fp_nhelix3;top_mem
+pull-group3-name        = top_mem
+pull-group4-name        = fp_nhelix2
+
+pull-coord1-type        = umbrella  ; harmonic potential
+pull-coord1-geometry    = cylinder  ; simple distance increase
+pull-coord1-dim         = N N Y     ; pull along z
+pull-coord1-vec         = 0 0 -1
+pull-cylinder-r         = 5
+pull-coord1-groups      = 1 2       ; groups 1 (FP A) and 4 (GP D) define the reaction coordinate
+pull-coord1-start       = yes       ; define initial COM distance > 0
+pull-coord1-rate        = 0;-0.00001   ; 0.00001 nm per ps = 0.01 nm per ns
+pull-coord1-k           = 1000       ; kJ mol^-1 nm^-2
+
+pull-coord2-type        = umbrella  ; harmonic potential
+pull-coord2-geometry    = cylinder  ; simple distance increase
+pull-coord2-dim         = N N Y     ; pull along z
+pull-coord2-vec         = 0 0 -1
+;pull-cylinder-r         = 5
+pull-coord2-groups      = 3 4       ; groups 1 (FP A) and 4 (GP D) define the reaction coordinate
+pull-coord2-start       = yes       ; define initial COM distance > 0
+pull-coord2-rate        = 0;-0.00001   ; 0.00001 nm per ps = 0.01 nm per ns
+pull-coord2-k           = 1000       ; kJ mol^-1 nm^-2
